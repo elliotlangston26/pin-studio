@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pin Studio - Your Magical Badge Collection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== THEME BAR ===== -->
+  <div class="theme-bar">
+    <div class="theme-bar-inner">
+      <span class="theme-bar-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        Style
+      </span>
+      <select id="themeSelect" class="theme-select">
+        <option value="fun">Fun</option>
+        <option value="hero">Hero</option>
+        <option value="cosmic">Cosmic</option>
+        <option value="anime">Anime</option>
+        <option value="retro">Retro</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ===== LANDING HERO ===== -->
+  <section class="landing" id="landing">
+
+    <!-- Animated sky background -->
+    <div class="sky-bg">
+      <div class="clouds" id="clouds"></div>
+      <div class="stars" id="stars"></div>
+    </div>
+
+    <!-- Castle silhouette (Fun theme) -->
+    <div class="castle-wrap" id="bgIllustration">
+      <svg class="castle-svg" viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Base towers -->
+        <rect x="80"  y="170" width="60"  height="110" rx="2" fill="#c8aaff"/>
+        <rect x="560" y="170" width="60"  height="110" rx="2" fill="#c8aaff"/>
+        <rect x="140" y="140" width="80"  height="140" rx="2" fill="#b08af0"/>
+        <rect x="480" y="140" width="80"  height="140" rx="2" fill="#b08af0"/>
+        <!-- Main keep -->
+        <rect x="260" y="100" width="180" height="180" rx="4" fill="#d4b8ff"/>
+        <!-- Centre tall tower -->
+        <rect x="310" y="40"  width="80"  height="240" rx="4" fill="#e8d4ff"/>
+        <!-- Turret tops -->
+        <polygon points="80,170 140,170 110,120"  fill="#9f6ef5"/>
+        <polygon points="560,170 620,170 590,120" fill="#9f6ef5"/>
+        <polygon points="140,140 220,140 180,85"  fill="#9f6ef5"/>
+        <polygon points="480,140 560,140 520,85"  fill="#9f6ef5"/>
+        <polygon points="260,100 440,100 350,50"  fill="#b08af0"/>
+        <polygon points="310,40  390,40  350,-10" fill="#9f6ef5"/>
+        <!-- Flags -->
+        <line x1="110" y1="120" x2="110" y2="90" stroke="#7c4dff" stroke-width="2"/>
+        <polygon points="110,90 130,98 110,106" fill="#ff6b9d"/>
+        <line x1="180" y1="85"  x2="180" y2="52" stroke="#7c4dff" stroke-width="2"/>
+        <polygon points="180,52 202,61 180,70" fill="#ffd166"/>
+        <line x1="520" y1="85"  x2="520" y2="52" stroke="#7c4dff" stroke-width="2"/>
+        <polygon points="520,52 542,61 520,70" fill="#ff6b9d"/>
+        <line x1="590" y1="120" x2="590" y2="90" stroke="#7c4dff" stroke-width="2"/>
+        <polygon points="590,90 610,98 590,106" fill="#ffd166"/>
+        <line x1="350" y1="-10" x2="350" y2="-42" stroke="#7c4dff" stroke-width="2"/>
+        <polygon points="350,-42 376,-30 350,-18" fill="#ff6b9d"/>
+        <!-- Windows & doors -->
+        <rect x="335" y="160" width="30" height="50" rx="15" fill="#7c4dff" opacity="0.4"/>
+        <rect x="290" y="130" width="22" height="28" rx="11" fill="#9f6ef5" opacity="0.5"/>
+        <rect x="388" y="130" width="22" height="28" rx="11" fill="#9f6ef5" opacity="0.5"/>
+        <!-- Ground -->
+        <rect x="0" y="278" width="700" height="4" rx="2" fill="#b08af0" opacity="0.5"/>
+      </svg>
+    </div>
+
+    <!-- City skyline (Hero theme) -->
+    <div class="city-wrap" id="cityIllustration" aria-hidden="true">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+        <!-- Moon -->
+        <circle cx="760" cy="60" r="42" fill="#ffd700" opacity="0.18"/>
+        <circle cx="760" cy="60" r="34" fill="#ffd700" opacity="0.22"/>
+
+        <!-- Far background buildings -->
+        <rect x="0"   y="200" width="55"  height="100" fill="#1a1a2e" opacity="0.6"/>
+        <rect x="50"  y="175" width="40"  height="125" fill="#16162a" opacity="0.6"/>
+        <rect x="85"  y="210" width="50"  height="90"  fill="#1a1a2e" opacity="0.6"/>
+        <rect x="800" y="190" width="50"  height="110" fill="#1a1a2e" opacity="0.6"/>
+        <rect x="845" y="165" width="55"  height="135" fill="#16162a" opacity="0.6"/>
+
+        <!-- Mid buildings -->
+        <rect x="30"  y="155" width="65"  height="145" fill="#22223b"/>
+        <rect x="90"  y="130" width="50"  height="170" fill="#1e1e38"/>
+        <!-- Antenna -->
+        <rect x="111" y="105" width="8"   height="28"  fill="#ed1d24" opacity="0.9"/>
+        <circle cx="115" cy="104" r="4" fill="#ffd700"/>
+
+        <rect x="135" y="160" width="70"  height="140" fill="#25253d"/>
+        <rect x="200" y="105" width="80"  height="195" fill="#1e1e38"/>
+        <!-- Spire -->
+        <polygon points="240,60 248,105 232,105" fill="#ed1d24"/>
+        <rect x="238" y="55" width="4" height="8" fill="#ffd700"/>
+
+        <rect x="275" y="145" width="55"  height="155" fill="#22223b"/>
+        <rect x="325" y="120" width="90"  height="180" fill="#1a1a30"/>
+        <!-- Antenna -->
+        <rect x="366" y="90"  width="7"   height="32"  fill="#ed1d24" opacity="0.9"/>
+
+        <!-- Tallest centre tower -->
+        <rect x="410" y="50"  width="100" height="250" fill="#16162a"/>
+        <polygon points="460,8 475,50 445,50" fill="#ed1d24"/>
+        <rect x="457" y="2"   width="6"   height="10"  fill="#ffd700"/>
+        <!-- Roof detail -->
+        <rect x="420" y="50"  width="80"  height="18"  fill="#22223b"/>
+
+        <rect x="505" y="115" width="75"  height="185" fill="#1e1e38"/>
+        <!-- Antenna -->
+        <rect x="538" y="88"  width="8"   height="30"  fill="#ed1d24" opacity="0.8"/>
+
+        <rect x="575" y="140" width="60"  height="160" fill="#22223b"/>
+        <rect x="630" y="100" width="85"  height="200" fill="#1a1a30"/>
+        <!-- Spire -->
+        <polygon points="672,58 682,100 662,100" fill="#ed1d24"/>
+
+        <rect x="710" y="155" width="70"  height="145" fill="#22223b"/>
+        <rect x="775" y="125" width="60"  height="175" fill="#1e1e38"/>
+        <rect x="830" y="170" width="70"  height="130" fill="#22223b"/>
+
+        <!-- Window grids — centre tower -->
+        <rect x="422" y="76"  width="10" height="14" fill="#ffd700" opacity="0.5"/>
+        <rect x="438" y="76"  width="10" height="14" fill="#ffd700" opacity="0.3"/>
+        <rect x="454" y="76"  width="10" height="14" fill="#ffd700" opacity="0.5"/>
+        <rect x="470" y="76"  width="10" height="14" fill="#ffd700" opacity="0.2"/>
+        <rect x="486" y="76"  width="10" height="14" fill="#ffd700" opacity="0.4"/>
+
+        <rect x="422" y="98"  width="10" height="14" fill="#ffd700" opacity="0.3"/>
+        <rect x="454" y="98"  width="10" height="14" fill="#ffd700" opacity="0.5"/>
+        <rect x="486" y="98"  width="10" height="14" fill="#ffd700" opacity="0.3"/>
+
+        <rect x="422" y="120" width="10" height="14" fill="#ed1d24" opacity="0.35"/>
+        <rect x="438" y="120" width="10" height="14" fill="#ffd700" opacity="0.4"/>
+        <rect x="470" y="120" width="10" height="14" fill="#ffd700" opacity="0.3"/>
+        <rect x="486" y="120" width="10" height="14" fill="#ed1d24" opacity="0.3"/>
+
+        <!-- Windows — left buildings -->
+        <rect x="205" y="118" width="8" height="10" fill="#ffd700" opacity="0.45"/>
+        <rect x="220" y="118" width="8" height="10" fill="#ffd700" opacity="0.25"/>
+        <rect x="250" y="118" width="8" height="10" fill="#ffd700" opacity="0.4"/>
+        <rect x="205" y="136" width="8" height="10" fill="#ed1d24" opacity="0.3"/>
+        <rect x="235" y="136" width="8" height="10" fill="#ffd700" opacity="0.35"/>
+
+        <rect x="330" y="133" width="9" height="11" fill="#ffd700" opacity="0.4"/>
+        <rect x="346" y="133" width="9" height="11" fill="#ffd700" opacity="0.2"/>
+        <rect x="380" y="133" width="9" height="11" fill="#ffd700" opacity="0.45"/>
+        <rect x="395" y="133" width="9" height="11" fill="#ed1d24" opacity="0.3"/>
+
+        <!-- Windows — right buildings -->
+        <rect x="510" y="128" width="8" height="10" fill="#ffd700" opacity="0.4"/>
+        <rect x="525" y="128" width="8" height="10" fill="#ffd700" opacity="0.3"/>
+        <rect x="555" y="128" width="8" height="10" fill="#ed1d24" opacity="0.35"/>
+        <rect x="510" y="146" width="8" height="10" fill="#ffd700" opacity="0.25"/>
+        <rect x="540" y="146" width="8" height="10" fill="#ffd700" opacity="0.45"/>
+
+        <rect x="635" y="115" width="9" height="11" fill="#ffd700" opacity="0.4"/>
+        <rect x="650" y="115" width="9" height="11" fill="#ffd700" opacity="0.2"/>
+        <rect x="680" y="115" width="9" height="11" fill="#ed1d24" opacity="0.35"/>
+        <rect x="695" y="115" width="9" height="11" fill="#ffd700" opacity="0.4"/>
+
+        <!-- Ground / street -->
+        <rect x="0" y="296" width="900" height="4" fill="#ed1d24" opacity="0.6"/>
+        <rect x="0" y="292" width="900" height="6" fill="#1a1a2e"/>
+      </svg>
+    </div>
+
+    <!-- Space scene (Cosmic theme) -->
+    <div class="space-wrap" id="spaceIllustration" aria-hidden="true">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+        <!-- Nebula glow patches -->
+        <ellipse cx="180" cy="120" rx="140" ry="70" fill="#4a0080" opacity="0.18"/>
+        <ellipse cx="700" cy="90"  rx="160" ry="80" fill="#002080" opacity="0.22"/>
+        <ellipse cx="450" cy="60"  rx="120" ry="50" fill="#800040" opacity="0.12"/>
+
+        <!-- Distant star clusters -->
+        <circle cx="60"  cy="30"  r="1.5" fill="#fff" opacity="0.9"/>
+        <circle cx="120" cy="55"  r="1"   fill="#ffe81f" opacity="0.8"/>
+        <circle cx="195" cy="20"  r="1.5" fill="#fff" opacity="0.7"/>
+        <circle cx="260" cy="45"  r="1"   fill="#fff" opacity="0.9"/>
+        <circle cx="310" cy="15"  r="1.5" fill="#4fc3f7" opacity="0.8"/>
+        <circle cx="370" cy="35"  r="1"   fill="#fff" opacity="0.6"/>
+        <circle cx="430" cy="18"  r="2"   fill="#fff" opacity="0.85"/>
+        <circle cx="490" cy="50"  r="1"   fill="#ffe81f" opacity="0.7"/>
+        <circle cx="550" cy="22"  r="1.5" fill="#fff" opacity="0.9"/>
+        <circle cx="610" cy="42"  r="1"   fill="#fff" opacity="0.7"/>
+        <circle cx="670" cy="18"  r="1.5" fill="#4fc3f7" opacity="0.8"/>
+        <circle cx="730" cy="38"  r="1"   fill="#fff" opacity="0.9"/>
+        <circle cx="800" cy="25"  r="1.5" fill="#fff" opacity="0.7"/>
+        <circle cx="858" cy="48"  r="1"   fill="#ffe81f" opacity="0.8"/>
+        <circle cx="88"  cy="75"  r="1"   fill="#fff" opacity="0.6"/>
+        <circle cx="155" cy="90"  r="1.5" fill="#fff" opacity="0.5"/>
+        <circle cx="340" cy="70"  r="1"   fill="#fff" opacity="0.7"/>
+        <circle cx="520" cy="78"  r="1"   fill="#4fc3f7" opacity="0.6"/>
+        <circle cx="760" cy="65"  r="1.5" fill="#fff" opacity="0.8"/>
+        <circle cx="880" cy="80"  r="1"   fill="#fff" opacity="0.6"/>
+
+        <!-- Large ringed planet (right) -->
+        <ellipse cx="760" cy="115" rx="90" ry="18" fill="none" stroke="#4fc3f7" stroke-width="6" opacity="0.25"/>
+        <ellipse cx="760" cy="115" rx="70" ry="14" fill="none" stroke="#ffe81f" stroke-width="3" opacity="0.3"/>
+        <circle  cx="760" cy="115" r="52" fill="#0a1a4a"/>
+        <circle  cx="760" cy="115" r="52" fill="url(#planetGrad)" opacity="0.9"/>
+        <ellipse cx="760" cy="110" rx="45" ry="18" fill="#0d2260" opacity="0.5"/>
+        <ellipse cx="760" cy="122" rx="40" ry="10" fill="#102878" opacity="0.4"/>
+        <!-- Ring in front -->
+        <ellipse cx="760" cy="115" rx="90" ry="18" fill="none" stroke="#4fc3f7" stroke-width="3" opacity="0.18" stroke-dasharray="280 0 0 0" pathLength="560"/>
+
+        <!-- Small moon (left) -->
+        <circle cx="155" cy="95" r="28" fill="#1a1a3a"/>
+        <circle cx="155" cy="95" r="28" fill="url(#moonGrad)" opacity="0.85"/>
+        <circle cx="145" cy="88" r="6"  fill="#000" opacity="0.25"/>
+        <circle cx="165" cy="103" r="4" fill="#000" opacity="0.2"/>
+        <circle cx="150" cy="108" r="3" fill="#000" opacity="0.18"/>
+
+        <!-- Tiny distant planet (centre-left) -->
+        <circle cx="420" cy="55" r="14" fill="#2a0040" opacity="0.8"/>
+        <circle cx="420" cy="55" r="14" fill="url(#miniPlanetGrad)" opacity="0.7"/>
+
+        <!-- Space station silhouette (centre top) -->
+        <g transform="translate(490, 38)" opacity="0.65">
+          <!-- Central hub -->
+          <circle cx="0" cy="0" r="10" fill="#1a1a2a" stroke="#4fc3f7" stroke-width="1.5"/>
+          <!-- Solar panels left -->
+          <rect x="-38" y="-4" width="26" height="8" rx="1" fill="#0a0a1a" stroke="#ffe81f" stroke-width="1"/>
+          <rect x="-36" y="-4" width="2" height="8" fill="#ffe81f" opacity="0.4"/>
+          <rect x="-30" y="-4" width="2" height="8" fill="#ffe81f" opacity="0.4"/>
+          <rect x="-24" y="-4" width="2" height="8" fill="#ffe81f" opacity="0.4"/>
+          <!-- Solar panels right -->
+          <rect x="12"  y="-4" width="26" height="8" rx="1" fill="#0a0a1a" stroke="#ffe81f" stroke-width="1"/>
+          <rect x="14"  y="-4" width="2" height="8" fill="#ffe81f" opacity="0.4"/>
+          <rect x="20"  y="-4" width="2" height="8" fill="#ffe81f" opacity="0.4"/>
+          <rect x="26"  y="-4" width="2" height="8" fill="#ffe81f" opacity="0.4"/>
+          <!-- Connector arm -->
+          <rect x="-12" y="-2" width="24" height="4" fill="#111" stroke="#4fc3f7" stroke-width="0.8"/>
+          <!-- Antenna -->
+          <line x1="0" y1="-10" x2="0" y2="-18" stroke="#4fc3f7" stroke-width="1.2"/>
+          <circle cx="0" cy="-19" r="2" fill="#ffe81f"/>
+        </g>
+
+        <!-- Hyperspace streaks -->
+        <line x1="20"  y1="60"  x2="60"  y2="65"  stroke="#fff" stroke-width="0.8" opacity="0.3"/>
+        <line x1="820" y1="50"  x2="870" y2="54"  stroke="#fff" stroke-width="0.8" opacity="0.25"/>
+        <line x1="290" y1="30"  x2="320" y2="32"  stroke="#4fc3f7" stroke-width="0.7" opacity="0.35"/>
+        <line x1="600" y1="25"  x2="640" y2="28"  stroke="#fff" stroke-width="0.7" opacity="0.3"/>
+
+        <!-- Alien landscape silhouette -->
+        <!-- Rocky terrain -->
+        <path d="M0,300 L0,230 L30,245 L55,215 L80,235 L110,200 L140,220 L165,205 L190,225 L220,195 L250,215 L275,200 L300,218 L330,190 L355,210 L380,198 L400,215 L425,195 L455,212 L480,200 L505,218 L530,205 L555,220 L580,200 L610,215 L635,198 L660,212 L690,200 L720,215 L750,205 L775,218 L800,200 L830,215 L860,205 L885,215 L900,210 L900,300 Z" fill="#050510"/>
+        <!-- Lighter ridge -->
+        <path d="M0,245 L30,255 L55,228 L80,248 L110,215 L140,232 L165,218 L190,238 L220,208 L250,228 L275,214 L300,230 L330,204 L355,222 L380,210 L400,228 L425,208 L455,224 L480,213 L505,230 L530,218 L555,232 L580,213 L610,227 L635,212 L660,225 L690,213 L720,228 L750,218 L775,230 L800,213 L830,228 L860,218 L885,228 L900,222 L900,300 L0,300 Z" fill="#0a0a20" opacity="0.8"/>
+
+        <!-- Lightsaber glow on horizon -->
+        <line x1="0" y1="298" x2="900" y2="298" stroke="#ffe81f" stroke-width="1.5" opacity="0.35"/>
+        <line x1="0" y1="299" x2="900" y2="299" stroke="#ffe81f" stroke-width="0.8" opacity="0.2"/>
+
+        <!-- SVG gradients -->
+        <defs>
+          <radialGradient id="planetGrad" cx="35%" cy="35%">
+            <stop offset="0%"   stop-color="#1e4db7"/>
+            <stop offset="50%"  stop-color="#0a2a7a"/>
+            <stop offset="100%" stop-color="#020820"/>
+          </radialGradient>
+          <radialGradient id="moonGrad" cx="40%" cy="35%">
+            <stop offset="0%"   stop-color="#3a3a5c"/>
+            <stop offset="100%" stop-color="#0d0d20"/>
+          </radialGradient>
+          <radialGradient id="miniPlanetGrad" cx="35%" cy="30%">
+            <stop offset="0%"   stop-color="#7a00b0"/>
+            <stop offset="100%" stop-color="#1a0030"/>
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- Manga scene (Anime theme) -->
+    <div class="anime-wrap" id="animeIllustration" aria-hidden="true">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+        <defs>
+          <!-- Screentone dot pattern -->
+          <pattern id="screentone" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+            <circle cx="4" cy="4" r="1.2" fill="#c084b8" opacity="0.18"/>
+          </pattern>
+          <!-- Speed lines gradient -->
+          <radialGradient id="speedGrad" cx="50%" cy="55%" r="50%">
+            <stop offset="0%" stop-color="#fff" stop-opacity="0"/>
+            <stop offset="70%" stop-color="#ffb8e0" stop-opacity="0.08"/>
+            <stop offset="100%" stop-color="#ffb8e0" stop-opacity="0.18"/>
+          </radialGradient>
+          <!-- Sky gradient -->
+          <linearGradient id="animeSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fce4f6"/>
+            <stop offset="100%" stop-color="#fdf0fa"/>
+          </linearGradient>
+          <!-- Mount Fuji gradient -->
+          <linearGradient id="fujiGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fff"/>
+            <stop offset="30%" stop-color="#e8d0e8"/>
+            <stop offset="100%" stop-color="#8b5a8b"/>
+          </linearGradient>
+          <!-- Blossom petal gradient -->
+          <radialGradient id="petalGrad" cx="50%" cy="30%">
+            <stop offset="0%" stop-color="#fff"/>
+            <stop offset="100%" stop-color="#ffb3d1"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Sky wash -->
+        <rect width="900" height="300" fill="url(#animeSky)"/>
+        <!-- Screentone overlay -->
+        <rect width="900" height="300" fill="url(#screentone)"/>
+        <!-- Speed-line vignette -->
+        <rect width="900" height="300" fill="url(#speedGrad)"/>
+
+        <!-- Speed / focus lines radiating from centre-top -->
+        <g opacity="0.06" stroke="#b0408a" stroke-width="0.8">
+          <line x1="450" y1="0" x2="0"   y2="300"/>
+          <line x1="450" y1="0" x2="60"  y2="300"/>
+          <line x1="450" y1="0" x2="120" y2="300"/>
+          <line x1="450" y1="0" x2="180" y2="300"/>
+          <line x1="450" y1="0" x2="240" y2="300"/>
+          <line x1="450" y1="0" x2="300" y2="300"/>
+          <line x1="450" y1="0" x2="360" y2="300"/>
+          <line x1="450" y1="0" x2="420" y2="300"/>
+          <line x1="450" y1="0" x2="480" y2="300"/>
+          <line x1="450" y1="0" x2="540" y2="300"/>
+          <line x1="450" y1="0" x2="600" y2="300"/>
+          <line x1="450" y1="0" x2="660" y2="300"/>
+          <line x1="450" y1="0" x2="720" y2="300"/>
+          <line x1="450" y1="0" x2="780" y2="300"/>
+          <line x1="450" y1="0" x2="840" y2="300"/>
+          <line x1="450" y1="0" x2="900" y2="300"/>
+        </g>
+
+        <!-- Mount Fuji (centre-left) -->
+        <path d="M290,300 L390,130 L420,148 L490,300 Z" fill="url(#fujiGrad)"/>
+        <!-- Snow cap -->
+        <path d="M390,130 L404,160 L418,148 L410,155 L390,148 Z" fill="#fff" opacity="0.95"/>
+        <!-- Fuji outline -->
+        <path d="M290,300 L390,130 L420,148 L490,300" fill="none" stroke="#6b2d6b" stroke-width="1.5" opacity="0.3"/>
+
+        <!-- Far hills / ridge -->
+        <path d="M0,300 L0,240 Q80,195 160,210 Q240,195 320,215 Q390,210 450,220 Q520,210 580,215 Q660,200 740,220 Q820,215 900,205 L900,300 Z" fill="#d4a8d4" opacity="0.35"/>
+        <path d="M0,300 L0,255 Q60,240 120,248 Q200,235 280,248 Q360,238 440,250 Q520,242 600,252 Q680,240 760,250 Q840,242 900,248 L900,300 Z" fill="#c87fc8" opacity="0.25"/>
+
+        <!-- Cherry blossom tree — left -->
+        <!-- Trunk -->
+        <path d="M80,300 Q82,270 78,255 Q76,240 85,225" fill="none" stroke="#6b3a3a" stroke-width="8" stroke-linecap="round"/>
+        <path d="M85,225 Q88,210 80,198" fill="none" stroke="#6b3a3a" stroke-width="5" stroke-linecap="round"/>
+        <!-- Branch right -->
+        <path d="M82,248 Q98,238 112,228" fill="none" stroke="#6b3a3a" stroke-width="4" stroke-linecap="round"/>
+        <!-- Branch left -->
+        <path d="M80,238 Q65,228 55,218" fill="none" stroke="#6b3a3a" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- Blossom clusters -->
+        <circle cx="80"  cy="192" r="32" fill="#ffb3cc" opacity="0.85"/>
+        <circle cx="60"  cy="198" r="22" fill="#ff90b3" opacity="0.75"/>
+        <circle cx="100" cy="200" r="24" fill="#ffb3cc" opacity="0.8"/>
+        <circle cx="55"  cy="212" r="18" fill="#ffcce0" opacity="0.7"/>
+        <circle cx="110" cy="215" r="16" fill="#ff90b3" opacity="0.7"/>
+        <circle cx="78"  cy="210" r="20" fill="#ffd6e8" opacity="0.65"/>
+
+        <!-- Cherry blossom tree — right -->
+        <path d="M820,300 Q818,270 822,255 Q824,240 815,225" fill="none" stroke="#6b3a3a" stroke-width="8" stroke-linecap="round"/>
+        <path d="M815,225 Q812,210 820,198" fill="none" stroke="#6b3a3a" stroke-width="5" stroke-linecap="round"/>
+        <path d="M818,248 Q802,238 788,228" fill="none" stroke="#6b3a3a" stroke-width="4" stroke-linecap="round"/>
+        <path d="M820,238 Q835,228 845,218" fill="none" stroke="#6b3a3a" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="820" cy="192" r="32" fill="#ffb3cc" opacity="0.85"/>
+        <circle cx="840" cy="198" r="22" fill="#ff90b3" opacity="0.75"/>
+        <circle cx="800" cy="200" r="24" fill="#ffb3cc" opacity="0.8"/>
+        <circle cx="845" cy="212" r="18" fill="#ffcce0" opacity="0.7"/>
+        <circle cx="790" cy="215" r="16" fill="#ff90b3" opacity="0.7"/>
+        <circle cx="822" cy="210" r="20" fill="#ffd6e8" opacity="0.65"/>
+
+        <!-- Torii gate (centre-right) -->
+        <g transform="translate(590, 155)" opacity="0.9">
+          <!-- Top beam (kasagi) -->
+          <rect x="-68" y="0"  width="136" height="11" rx="2" fill="#cc2200"/>
+          <!-- Second beam (shimagi) -->
+          <rect x="-56" y="16" width="112" height="8"  rx="1" fill="#cc2200"/>
+          <!-- Left pillar -->
+          <rect x="-48" y="24" width="12"  height="121" rx="2" fill="#cc2200"/>
+          <!-- Right pillar -->
+          <rect x="36"  y="24" width="12"  height="121" rx="2" fill="#cc2200"/>
+          <!-- Left nuki (cross-brace) -->
+          <rect x="-44" y="50" width="88"  height="7"   rx="1" fill="#cc2200" opacity="0.75"/>
+          <!-- Shadow depth on pillars -->
+          <rect x="-48" y="24" width="4"   height="121" rx="2" fill="#990000" opacity="0.3"/>
+          <rect x="44"  y="24" width="4"   height="121" rx="2" fill="#990000" opacity="0.3"/>
+        </g>
+
+        <!-- Floating blossom petals -->
+        <ellipse cx="150" cy="155" rx="5" ry="3" fill="#ffb3cc" opacity="0.8" transform="rotate(-30 150 155)"/>
+        <ellipse cx="220" cy="120" rx="4" ry="2.5" fill="#ff90b3" opacity="0.7" transform="rotate(20 220 120)"/>
+        <ellipse cx="340" cy="100" rx="5" ry="3" fill="#ffcce0" opacity="0.75" transform="rotate(-45 340 100)"/>
+        <ellipse cx="480" cy="85"  rx="4" ry="2.5" fill="#ffb3cc" opacity="0.65" transform="rotate(15 480 85)"/>
+        <ellipse cx="560" cy="118" rx="5" ry="3" fill="#ff90b3" opacity="0.7" transform="rotate(-20 560 118)"/>
+        <ellipse cx="680" cy="95"  rx="4" ry="2.5" fill="#ffcce0" opacity="0.8" transform="rotate(35 680 95)"/>
+        <ellipse cx="760" cy="135" rx="5" ry="3" fill="#ffb3cc" opacity="0.7" transform="rotate(-15 760 135)"/>
+        <ellipse cx="200" cy="175" rx="4" ry="2.5" fill="#ff90b3" opacity="0.65" transform="rotate(40 200 175)"/>
+        <ellipse cx="440" cy="145" rx="5" ry="3" fill="#ffcce0" opacity="0.75" transform="rotate(-25 440 145)"/>
+        <ellipse cx="710" cy="168" rx="4" ry="2.5" fill="#ffb3cc" opacity="0.7" transform="rotate(10 710 168)"/>
+
+        <!-- Manga action star burst (top-right accent) -->
+        <g transform="translate(820, 60)" opacity="0.18">
+          <polygon points="0,-22 5,-8 19,-8 8,1 13,15 0,6 -13,15 -8,1 -19,-8 -5,-8" fill="#b0408a"/>
+        </g>
+        <g transform="translate(100, 75)" opacity="0.14">
+          <polygon points="0,-16 3.5,-6 14,-6 6,0.5 9,11 0,5 -9,11 -6,0.5 -14,-6 -3.5,-6" fill="#b0408a"/>
+        </g>
+
+        <!-- Manga panel border lines (ground level) -->
+        <line x1="0"   y1="298" x2="900" y2="298" stroke="#6b2d6b" stroke-width="1.5" opacity="0.25"/>
+        <line x1="0"   y1="299" x2="900" y2="299" stroke="#ffb3cc" stroke-width="0.8" opacity="0.4"/>
+
+        <!-- Ground: grassy foreground strip -->
+        <path d="M0,300 L0,285 Q100,275 200,280 Q300,272 400,278 Q500,272 600,279 Q700,274 800,280 Q870,276 900,278 L900,300 Z" fill="#e8a0c8" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <!-- Retro gaming scene (Retro theme) -->
+    <div class="retro-wrap" id="retroIllustration" aria-hidden="true">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+        <defs>
+          <!-- Ground brick pattern row A -->
+          <pattern id="rpBrickA" x="0" y="0" width="48" height="20" patternUnits="userSpaceOnUse">
+            <rect width="48" height="20" fill="#904e1e"/>
+            <rect x="1" y="1"  width="46" height="8"  fill="#b06228"/>
+            <rect x="1" y="11" width="46" height="8"  fill="#b06228"/>
+            <rect x="0" y="9"  width="48" height="2"  fill="#6a3610"/>
+            <rect x="0" y="0"  width="1"  height="20" fill="#6a3610"/>
+            <rect x="47" y="0" width="1"  height="20" fill="#6a3610"/>
+          </pattern>
+          <!-- Ground brick pattern row B (offset) -->
+          <pattern id="rpBrickB" x="24" y="0" width="48" height="20" patternUnits="userSpaceOnUse">
+            <rect width="48" height="20" fill="#904e1e"/>
+            <rect x="1" y="1"  width="46" height="8"  fill="#b06228"/>
+            <rect x="1" y="11" width="46" height="8"  fill="#b06228"/>
+            <rect x="0" y="9"  width="48" height="2"  fill="#6a3610"/>
+            <rect x="0" y="0"  width="1"  height="20" fill="#6a3610"/>
+            <rect x="47" y="0" width="1"  height="20" fill="#6a3610"/>
+          </pattern>
+          <!-- CRT scanline -->
+          <pattern id="rpScan" x="0" y="0" width="900" height="4" patternUnits="userSpaceOnUse">
+            <rect x="0" y="2" width="900" height="1" fill="#000" opacity="0.09"/>
+          </pattern>
+        </defs>
+
+        <!-- Night sky -->
+        <rect width="900" height="300" fill="#1a1a5e"/>
+
+        <!-- Pixel moon (top-left) -->
+        <rect x="46" y="18" width="44" height="44" fill="#f0e858" opacity="0.9"/>
+        <rect x="50" y="22" width="36" height="36" fill="#f8f060"/>
+        <!-- Moon craters -->
+        <rect x="58" y="30" width="8" height="8" fill="#d8d040" opacity="0.5"/>
+        <rect x="70" y="44" width="6" height="6" fill="#d8d040" opacity="0.38"/>
+        <rect x="59" y="47" width="4" height="4" fill="#d8d040" opacity="0.3"/>
+
+        <!-- Stars (pixel squares) -->
+        <rect x="128" y="14" width="4" height="4" fill="#fff" opacity="0.8"/>
+        <rect x="194" y="26" width="3" height="3" fill="#ffe566" opacity="0.9"/>
+        <rect x="258" y="10" width="4" height="4" fill="#fff" opacity="0.75"/>
+        <rect x="322" y="22" width="3" height="3" fill="#ffe566" opacity="0.85"/>
+        <rect x="388" y="8"  width="4" height="4" fill="#fff" opacity="0.9"/>
+        <rect x="452" y="30" width="3" height="3" fill="#ffe566" opacity="0.7"/>
+        <rect x="516" y="14" width="4" height="4" fill="#fff" opacity="0.8"/>
+        <rect x="580" y="28" width="3" height="3" fill="#ffe566" opacity="0.85"/>
+        <rect x="644" y="10" width="4" height="4" fill="#fff" opacity="0.9"/>
+        <rect x="708" y="24" width="3" height="3" fill="#ffe566" opacity="0.75"/>
+        <rect x="772" y="6"  width="4" height="4" fill="#fff" opacity="0.85"/>
+        <rect x="836" y="18" width="3" height="3" fill="#ffe566" opacity="0.8"/>
+        <rect x="148" y="46" width="3" height="3" fill="#fff" opacity="0.6"/>
+        <rect x="340" y="44" width="3" height="3" fill="#ffe566" opacity="0.65"/>
+        <rect x="530" y="50" width="3" height="3" fill="#fff" opacity="0.6"/>
+        <rect x="720" y="42" width="3" height="3" fill="#ffe566" opacity="0.7"/>
+
+        <!-- Background mountains (pixel-art, dark green) -->
+        <!-- Mountain 1 (left) -->
+        <g fill="#162a08">
+          <rect x="88"  y="200" width="24"  height="12"/>
+          <rect x="76"  y="212" width="48"  height="12"/>
+          <rect x="64"  y="224" width="72"  height="12"/>
+          <rect x="52"  y="236" width="96"  height="12"/>
+          <rect x="40"  y="248" width="120" height="12"/>
+        </g>
+        <rect x="88" y="200" width="24" height="4" fill="#d8eef8"/>
+        <rect x="92" y="204" width="16" height="4" fill="#d8eef8"/>
+
+        <!-- Mountain 2 (centre, tallest) -->
+        <g fill="#162a08">
+          <rect x="418" y="176" width="24"  height="12"/>
+          <rect x="406" y="188" width="48"  height="12"/>
+          <rect x="394" y="200" width="72"  height="12"/>
+          <rect x="382" y="212" width="96"  height="12"/>
+          <rect x="370" y="224" width="120" height="12"/>
+          <rect x="358" y="236" width="144" height="12"/>
+          <rect x="346" y="248" width="168" height="12"/>
+        </g>
+        <rect x="418" y="176" width="24" height="5"  fill="#d8eef8"/>
+        <rect x="422" y="181" width="16" height="4"  fill="#d8eef8"/>
+        <rect x="418" y="185" width="24" height="3"  fill="#d8eef8" opacity="0.5"/>
+
+        <!-- Mountain 3 (right) -->
+        <g fill="#162a08">
+          <rect x="696" y="204" width="24"  height="12"/>
+          <rect x="684" y="216" width="48"  height="12"/>
+          <rect x="672" y="228" width="72"  height="12"/>
+          <rect x="660" y="240" width="96"  height="12"/>
+          <rect x="648" y="252" width="120" height="8"/>
+        </g>
+        <rect x="696" y="204" width="24" height="4" fill="#d8eef8"/>
+        <rect x="700" y="208" width="16" height="4" fill="#d8eef8"/>
+
+        <!-- Pixel clouds (2 rects each — classic 8-bit style) -->
+        <!-- Cloud 1 -->
+        <rect x="174" y="68" width="28" height="12" fill="#c8e0f0"/>
+        <rect x="154" y="80" width="68" height="12" fill="#c8e0f0"/>
+        <!-- Cloud 2 (larger) -->
+        <rect x="478" y="52" width="32" height="12" fill="#c8e0f0"/>
+        <rect x="454" y="64" width="80" height="12" fill="#c8e0f0"/>
+        <!-- Cloud 3 -->
+        <rect x="766" y="60" width="24" height="10" fill="#c8e0f0"/>
+        <rect x="748" y="70" width="56" height="10" fill="#c8e0f0"/>
+
+        <!-- Pixel mushroom (standing on ground) -->
+        <!-- Stem -->
+        <rect x="196" y="242" width="20" height="18" fill="#e8e0b0"/>
+        <!-- Cap -->
+        <rect x="184" y="210" width="44" height="10" fill="#cc2200"/>
+        <rect x="178" y="218" width="56" height="24" fill="#cc2200"/>
+        <!-- Cap highlight -->
+        <rect x="184" y="210" width="44" height="3"  fill="#ff4422" opacity="0.4"/>
+        <!-- White spots -->
+        <rect x="182" y="222" width="10" height="9" fill="#fff"/>
+        <rect x="202" y="226" width="8"  height="8" fill="#fff"/>
+        <rect x="218" y="222" width="8"  height="8" fill="#fff"/>
+        <!-- Eyes on stem -->
+        <rect x="198" y="244" width="5" height="5" fill="#2a1400"/>
+        <rect x="209" y="244" width="5" height="5" fill="#2a1400"/>
+
+        <!-- Question blocks (? blocks floating in mid-air) -->
+        <!-- Block 1 (x=300, y=192) -->
+        <rect x="300" y="192" width="28" height="28" fill="#c88000"/>
+        <rect x="300" y="192" width="28" height="4"  fill="#e8a820"/>
+        <rect x="300" y="192" width="4"  height="28" fill="#e8a820"/>
+        <rect x="324" y="192" width="4"  height="28" fill="#803800"/>
+        <rect x="300" y="216" width="28" height="4"  fill="#803800"/>
+        <text x="314" y="213" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="16" fill="#fff">?</text>
+
+        <!-- Block 2 (x=336, raised higher) -->
+        <rect x="336" y="168" width="28" height="28" fill="#c88000"/>
+        <rect x="336" y="168" width="28" height="4"  fill="#e8a820"/>
+        <rect x="336" y="168" width="4"  height="28" fill="#e8a820"/>
+        <rect x="360" y="168" width="4"  height="28" fill="#803800"/>
+        <rect x="336" y="192" width="28" height="4"  fill="#803800"/>
+        <text x="350" y="189" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="16" fill="#fff">?</text>
+
+        <!-- Block 3 (x=372, y=192) -->
+        <rect x="372" y="192" width="28" height="28" fill="#c88000"/>
+        <rect x="372" y="192" width="28" height="4"  fill="#e8a820"/>
+        <rect x="372" y="192" width="4"  height="28" fill="#e8a820"/>
+        <rect x="396" y="192" width="4"  height="28" fill="#803800"/>
+        <rect x="372" y="216" width="28" height="4"  fill="#803800"/>
+        <text x="386" y="213" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="16" fill="#fff">?</text>
+
+        <!-- Coins (floating) -->
+        <!-- Coin above block 2 -->
+        <rect x="343" y="142" width="14" height="18" fill="#ffd700"/>
+        <rect x="343" y="142" width="4"  height="18" fill="#ffee50" opacity="0.7"/>
+        <rect x="343" y="142" width="14" height="3"  fill="#ffee50"/>
+        <!-- Coin right of blocks -->
+        <rect x="450" y="180" width="12" height="16" fill="#ffd700"/>
+        <rect x="450" y="180" width="4"  height="16" fill="#ffee50" opacity="0.7"/>
+        <rect x="450" y="180" width="12" height="2"  fill="#ffee50"/>
+
+        <!-- Green pipe -->
+        <!-- Top cap -->
+        <rect x="710" y="208" width="64" height="18" fill="#22aa22"/>
+        <rect x="710" y="208" width="64" height="4"  fill="#44cc44"/>
+        <rect x="710" y="208" width="4"  height="18" fill="#44cc44"/>
+        <rect x="770" y="208" width="4"  height="18" fill="#118811"/>
+        <rect x="710" y="222" width="64" height="4"  fill="#118811"/>
+        <!-- Shaft -->
+        <rect x="720" y="226" width="44" height="34" fill="#1a8a1a"/>
+        <rect x="720" y="226" width="4"  height="34" fill="#33aa33"/>
+        <rect x="760" y="226" width="4"  height="34" fill="#107810"/>
+
+        <!-- Castle (right edge) -->
+        <!-- Main body -->
+        <rect x="820" y="188" width="80" height="72" fill="#c0a870"/>
+        <!-- Brick texture lines -->
+        <rect x="820" y="200" width="80" height="2" fill="#a89050" opacity="0.45"/>
+        <rect x="820" y="214" width="80" height="2" fill="#a89050" opacity="0.45"/>
+        <rect x="820" y="228" width="80" height="2" fill="#a89050" opacity="0.45"/>
+        <rect x="820" y="242" width="80" height="2" fill="#a89050" opacity="0.45"/>
+        <!-- Battlements -->
+        <rect x="820" y="172" width="18" height="20" fill="#c0a870"/>
+        <rect x="843" y="172" width="18" height="20" fill="#c0a870"/>
+        <rect x="866" y="172" width="18" height="20" fill="#c0a870"/>
+        <rect x="889" y="172" width="11" height="20" fill="#c0a870"/>
+        <!-- Gate -->
+        <rect x="848" y="228" width="20" height="32" fill="#3a2a10"/>
+        <rect x="852" y="223" width="12" height="7"  fill="#3a2a10"/>
+        <!-- Windows -->
+        <rect x="823" y="200" width="12" height="14" fill="#3a2a10"/>
+        <rect x="865" y="200" width="12" height="14" fill="#3a2a10"/>
+        <!-- Castle highlight -->
+        <rect x="820" y="188" width="4" height="72" fill="#d8c090" opacity="0.45"/>
+        <!-- Flag -->
+        <rect x="826" y="152" width="3"  height="24" fill="#8b6030"/>
+        <rect x="829" y="152" width="16" height="10" fill="#cc2200"/>
+        <rect x="829" y="152" width="16" height="3"  fill="#ff4422" opacity="0.45"/>
+
+        <!-- Ground (two rows of bricks) -->
+        <rect x="0" y="260" width="900" height="20" fill="url(#rpBrickA)"/>
+        <rect x="0" y="280" width="900" height="20" fill="url(#rpBrickB)"/>
+
+        <!-- CRT scanlines overlay -->
+        <rect width="900" height="300" fill="url(#rpScan)"/>
+      </svg>
+    </div>
+
+    <!-- Hero copy -->
+    <div class="landing-content">
+      <div class="sparkle-ring" aria-hidden="true">
+        <svg class="logo-pin-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <!-- Pin badge body (outer rim) -->
+          <circle cx="50" cy="40" r="34" fill="#ff6b9d" stroke="#fff" stroke-width="3.5"/>
+          <!-- Inner ring -->
+          <circle cx="50" cy="40" r="26" fill="#ffaac8" stroke="#fff" stroke-width="2"/>
+          <!-- Face area -->
+          <circle cx="50" cy="40" r="20" fill="#fff9fb"/>
+          <!-- Shine highlight -->
+          <ellipse cx="38" cy="28" rx="7" ry="5" fill="#fff" opacity="0.45" transform="rotate(-25 38 28)"/>
+          <!-- Eyes — happy wide eyes -->
+          <circle cx="42" cy="36" r="4" fill="#2d1b2e"/>
+          <circle cx="58" cy="36" r="4" fill="#2d1b2e"/>
+          <!-- Eye shine dots -->
+          <circle cx="43.5" cy="34.5" r="1.5" fill="#fff"/>
+          <circle cx="59.5" cy="34.5" r="1.5" fill="#fff"/>
+          <!-- Big smile -->
+          <path d="M40,44 Q50,54 60,44" fill="none" stroke="#d63584" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Rosy cheeks -->
+          <circle cx="36" cy="44" r="5" fill="#ff8fa3" opacity="0.4"/>
+          <circle cx="64" cy="44" r="5" fill="#ff8fa3" opacity="0.4"/>
+          <!-- Tiny sparkle top-left -->
+          <text x="8"  y="22" font-size="11" fill="#ffd166">✦</text>
+          <!-- Tiny sparkle top-right -->
+          <text x="74" y="16" font-size="8"  fill="#fff" opacity="0.85">✦</text>
+          <!-- Needle -->
+          <rect x="47" y="72" width="6" height="20" fill="#ffd166" rx="3"/>
+          <circle cx="50" cy="94" r="4" fill="#ffd166" stroke="#c9a84c" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="title-word">Pin</span>
+        <span class="title-word title-studio">Studio</span>
+      </h1>
+      <p class="hero-sub">Your magical pin badge collection, all in one place</p>
+
+      <div class="hero-stats" id="heroStats">
+        <div class="stat-bubble">
+          <span class="stat-num" id="totalCount">0</span>
+          <span class="stat-label">Pin Badges</span>
+        </div>
+        <div class="stat-divider">✦</div>
+        <div class="stat-bubble">
+          <span class="stat-num" id="categoryCount">0</span>
+          <span class="stat-label">Categories</span>
+        </div>
+      </div>
+
+      <div class="hero-cta-group">
+        <a href="#collection" class="btn-cta-primary" id="ctaBtn">
+          <span class="btn-cta-shine"></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Collect Your First Pin Badge Now!
+        </a>
+        <button class="btn-cta-secondary" id="openModalBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add a Pin Badge
+        </button>
+      </div>
+
+      <div class="category-pills">
+        <span class="pill pill-marvel">Marvel</span>
+        <span class="pill pill-star-wars">Star Wars</span>
+        <span class="pill pill-disney">Disney</span>
+        <span class="pill pill-anime">Anime</span>
+        <span class="pill pill-pokemon">Pokemon</span>
+        <span class="pill pill-games">Games</span>
+        <span class="pill pill-culture">Culture</span>
+        <span class="pill pill-japan">Japan</span>
+        <span class="pill pill-tokusatsu">Tokusatsu</span>
+      </div>
+    </div>
+
+    <!-- Floating decorative pins -->
+    <div class="floating-pins" id="floatingPins"></div>
+
+    <!-- Wave divider -->
+    <div class="wave-divider" aria-hidden="true">
+      <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C240,90 480,0 720,50 C960,100 1200,20 1440,55 L1440,90 L0,90 Z" fill="#f9f4ff"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES STRIP ===== -->
+  <section class="features-strip">
+    <div class="feature-item">
+      <div class="feature-icon" style="background:#ffe0f0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ff6b9d" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      </div>
+      <div>
+        <strong>Organise & Browse</strong>
+        <span>Sort by category, name, or date</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon" style="background:#e8f0ff">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7c4dff" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <div>
+        <strong>Photo Uploads</strong>
+        <span>Snap your pin badges for the gallery</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon" style="background:#fff8db">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div>
+        <strong>10+ Pin Badge Categories</strong>
+        <span>Marvel, Disney, Anime & more</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon" style="background:#e8fff5">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#06d6a0" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div>
+        <strong>Saved Locally</strong>
+        <span>Your data stays on your device</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COLLECTION SECTION ===== -->
+  <main class="main-content" id="collection">
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+      <div class="controls-left">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="6"/><path d="M12 14v8"/><path d="M9 19h6"/></svg>
+          My Collection
+        </h2>
+        <span class="pin-count-badge" id="displayCount">0 pin badges</span>
+        <div class="data-btns">
+          <button class="btn-data" id="exportBtn" title="Export collection as JSON backup">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <label class="btn-data btn-import-label" title="Restore from JSON backup">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Import
+            <input type="file" id="importInput" accept=".json" hidden />
+          </label>
+        </div>
+      </div>
+      <div class="controls-right">
+        <div class="filter-group search-group">
+          <label for="searchInput" class="sr-only">Search</label>
+          <div class="search-input-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" id="searchInput" class="control-select search-input" placeholder="Search pins…" autocomplete="off" />
+          </div>
+        </div>
+        <div class="filter-group">
+          <label for="filterCategory">Category</label>
+          <select id="filterCategory" class="control-select">
+            <option value="all">All Categories</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="sortOrder">Sort by</label>
+          <select id="sortOrder" class="control-select">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="name-az">Name A–Z</option>
+            <option value="name-za">Name Z–A</option>
+            <option value="category">Category</option>
+            <option value="fav-first">Favourites First</option>
+          </select>
+        </div>
+        <button class="btn-add-inline" id="openModalBtnBar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Pin Badge
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState">
+      <div class="empty-illustration">
+        <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Cork board -->
+          <rect x="10" y="30" width="200" height="155" rx="16" fill="#fdf0f5"/>
+          <rect x="10" y="30" width="200" height="24" rx="12" fill="#ffaac8"/>
+          <!-- Border dots -->
+          <circle cx="30"  cy="42" r="5" fill="#fff" opacity="0.7"/>
+          <circle cx="110" cy="42" r="5" fill="#fff" opacity="0.7"/>
+          <circle cx="190" cy="42" r="5" fill="#fff" opacity="0.7"/>
+          <!-- Grid dots -->
+          <circle cx="65"  cy="95"  r="3" fill="#ffaac8" opacity="0.6"/>
+          <circle cx="110" cy="95"  r="3" fill="#ffaac8" opacity="0.6"/>
+          <circle cx="155" cy="95"  r="3" fill="#ffaac8" opacity="0.6"/>
+          <circle cx="65"  cy="135" r="3" fill="#ffaac8" opacity="0.6"/>
+          <circle cx="110" cy="135" r="3" fill="#ffaac8" opacity="0.6"/>
+          <circle cx="155" cy="135" r="3" fill="#ffaac8" opacity="0.6"/>
+          <!-- Big add circle -->
+          <circle cx="110" cy="115" r="28" fill="#fff" stroke="#ff6b9d" stroke-width="2.5" stroke-dasharray="6,3"/>
+          <line x1="110" y1="104" x2="110" y2="126" stroke="#ff6b9d" stroke-width="3" stroke-linecap="round"/>
+          <line x1="99"  y1="115" x2="121" y2="115" stroke="#ff6b9d" stroke-width="3" stroke-linecap="round"/>
+          <!-- Sparkles -->
+          <text x="22"  y="78"  font-size="14" fill="#ffd166">✦</text>
+          <text x="175" y="78"  font-size="10" fill="#b08af0">✦</text>
+          <text x="170" y="160" font-size="12" fill="#ffd166">✦</text>
+          <text x="28"  y="168" font-size="10" fill="#ff6b9d">✦</text>
+        </svg>
+      </div>
+      <h3>Your board is empty!</h3>
+      <p>Pin badges are waiting to be collected. Start your magical journey!</p>
+      <button class="btn-cta-primary btn-cta-sm" id="openModalBtn2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Your First Pin Badge
+      </button>
+    </div>
+
+    <!-- Pin Grid -->
+    <div class="pin-grid" id="pinGrid"></div>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-pin-row" id="footerPins" aria-hidden="true"></div>
+    <p>Pin Studio ✦ Keep collecting, keep shining ✦</p>
+  </footer>
+
+  <!-- ===== ADD/EDIT PIN MODAL ===== -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add New Pin Badge</h3>
+        <button class="modal-close" id="closeModalBtn" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="pinForm" class="pin-form" novalidate>
+        <input type="hidden" id="editId" />
+
+        <!-- Photo Upload -->
+        <div class="form-group">
+          <label>Photo <span class="optional">(optional)</span></label>
+          <div class="photo-upload" id="photoUploadArea">
+            <input type="file" id="photoInput" accept="image/*" hidden />
+            <div class="photo-placeholder" id="photoPlaceholder">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4"  y="10" width="40" height="30" rx="4" fill="#fce8f3" stroke="#ff6b9d" stroke-width="2"/>
+                <circle cx="16" cy="22" r="5" fill="#ffaac8"/>
+                <path d="M4 34 L14 24 L22 32 L30 22 L44 34" fill="#ff6b9d" opacity="0.25"/>
+                <line x1="24" y1="3"  x2="24" y2="12" stroke="#ff6b9d" stroke-width="2" stroke-linecap="round"/>
+                <line x1="19" y1="8"  x2="24" y2="3"  stroke="#ff6b9d" stroke-width="2" stroke-linecap="round"/>
+                <line x1="29" y1="8"  x2="24" y2="3"  stroke="#ff6b9d" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Click or drag to upload</span>
+              <small>JPG, PNG, GIF, WebP &bull; max 5 MB</small>
+            </div>
+            <img id="photoPreview" class="photo-preview" src="" alt="Preview" hidden />
+            <button type="button" class="photo-remove" id="photoRemoveBtn" hidden>Remove photo</button>
+          </div>
+        </div>
+
+        <!-- Name -->
+        <div class="form-group">
+          <label for="pinName">Pin Badge Name <span class="required">*</span></label>
+          <input type="text" id="pinName" placeholder="e.g. Iron Man Mark VII" maxlength="80" required />
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label for="pinCategory">Category <span class="required">*</span></label>
+          <select id="pinCategory" required>
+            <option value="" disabled selected>Choose a category…</option>
+            <option value="Marvel">Marvel</option>
+            <option value="Star Wars">Star Wars</option>
+            <option value="Disney">Disney</option>
+            <option value="Anime">Anime</option>
+            <option value="Pokemon">Pokemon</option>
+            <option value="Games">Games</option>
+            <option value="Culture">Culture</option>
+            <option value="Japan">Japan</option>
+            <option value="England">England</option>
+            <option value="Tokusatsu">Tokusatsu</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+          <label for="pinNotes">Notes <span class="optional">(optional)</span></label>
+          <textarea id="pinNotes" placeholder="Any details about this pin badge…" rows="3" maxlength="300"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+          <button type="submit" class="btn-primary" id="submitBtn">Add Pin Badge</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== DELETE CONFIRM MODAL ===== -->
+  <div class="modal-overlay" id="deleteOverlay" role="dialog" aria-modal="true">
+    <div class="modal modal-small">
+      <div class="modal-header">
+        <h3>Remove Pin Badge?</h3>
+        <button class="modal-close" id="closeDeleteBtn" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <p class="delete-msg">Are you sure you want to remove <strong id="deleteNameDisplay"></strong> from your collection?</p>
+      <div class="form-actions">
+        <button class="btn-secondary" id="cancelDeleteBtn">Keep It</button>
+        <button class="btn-danger" id="confirmDeleteBtn">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
