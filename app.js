@@ -721,6 +721,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (modalOverlay.classList.contains('active'))  safeCloseModal();
     if (deleteOverlay.classList.contains('active')) closeDeleteModal();
+    if (authOverlay?.classList.contains('active'))  closeAuthModal();
   }
 });
 
@@ -739,23 +740,43 @@ if (themeSelect) {
   themeSelect.addEventListener('change', () => applyTheme(themeSelect.value));
 }
 
-// ── Auth screen / app visibility ──────────────────────────
+// ── Auth modal ────────────────────────────────────────────
 
-function showAuthScreen() {
-  document.getElementById('authScreen').style.display = 'flex';
-  document.getElementById('app').style.display        = 'none';
+const authOverlay = document.getElementById('authOverlay');
+
+function openAuthModal() {
+  authOverlay.classList.add('active');
+  setTimeout(() => document.getElementById('authEmail').focus(), 80);
 }
 
-function showApp() {
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('app').style.display        = 'block';
+function closeAuthModal() {
+  authOverlay.classList.remove('active');
+}
+
+function updateAuthButtons() {
+  const signUpBtn = document.getElementById('signUpBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (isLoggedIn()) {
+    signUpBtn.style.display = 'none';
+    logoutBtn.style.display = '';
+  } else {
+    signUpBtn.style.display = '';
+    logoutBtn.style.display = 'none';
+  }
 }
 
 function handleLogout() {
   clearToken();
   pins = [];
-  showAuthScreen();
+  updateAuthButtons();
+  render();
 }
+
+document.getElementById('signUpBtn').addEventListener('click', openAuthModal);
+document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+document.getElementById('closeAuthBtn').addEventListener('click', closeAuthModal);
+document.getElementById('cancelAuthBtn').addEventListener('click', closeAuthModal);
+authOverlay.addEventListener('click', e => { if (e.target === authOverlay) closeAuthModal(); });
 
 document.getElementById('authForm').addEventListener('submit', async e => {
   e.preventDefault();
@@ -778,14 +799,14 @@ document.getElementById('authForm').addEventListener('submit', async e => {
 
     saveToken(data.token);
     pins = await loadPins();
-    showApp();
+    closeAuthModal();
+    updateAuthButtons();
     render();
+    showToast(`Welcome${isSignup ? '' : ' back'}, ${data.user.name}!`);
   } catch {
     showToast('Network error — please try again');
   }
 });
-
-document.getElementById('logoutBtn').addEventListener('click', handleLogout);
 
 document.getElementById('authToggleLink').addEventListener('click', e => {
   e.preventDefault();
@@ -799,16 +820,24 @@ document.getElementById('authToggleLink').addEventListener('click', e => {
   document.getElementById('authToggleLink').textContent  = isSignup ? 'Sign up' : 'Log in';
 });
 
+// ── Guard: redirect unauthenticated "add pin" clicks to auth modal ────────────
+
+const _openModal = openModal;
+// Patch openModal so that clicking any Add Pin button while logged out
+// opens the auth modal instead.
+openModal = function(pin = null) {
+  if (!isLoggedIn()) { openAuthModal(); return; }
+  _openModal(pin);
+};
+
 // ── Init ──────────────────────────────────────────────────
 
 async function init() {
   applyTheme(localStorage.getItem(THEME_KEY) || 'fun');
-  if (!isLoggedIn()) {
-    showAuthScreen();
-    return;
+  updateAuthButtons();
+  if (isLoggedIn()) {
+    pins = await loadPins();
   }
-  pins = await loadPins();
-  showApp();
   render();
 }
 

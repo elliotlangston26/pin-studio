@@ -2,12 +2,13 @@
 
 require('dotenv').config();
 
-const express  = require('express');
-const path     = require('path');
+const express      = require('express');
+const path         = require('path');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
-const { Pool } = require('pg');
-const bcrypt   = require('bcryptjs');
-const jwt      = require('jsonwebtoken');
+const { Pool }     = require('pg');
+const bcrypt       = require('bcryptjs');
+const jwt          = require('jsonwebtoken');
+const nodemailer   = require('nodemailer');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,25 @@ const PORT = process.env.PORT || 3000;
 // ── Database ──────────────────────────────────────────────────────────────────
 
 const db = new Pool({ connectionString: process.env.DATABASE_URL });
+
+// ── Email (optional — only active when EMAIL_USER + EMAIL_PASS are set) ───────
+
+const mailer = (process.env.EMAIL_USER && process.env.EMAIL_PASS)
+  ? nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+    })
+  : null;
+
+function notifySignup(name, email) {
+  if (!mailer) return;
+  mailer.sendMail({
+    from:    process.env.EMAIL_USER,
+    to:      'elliotlangston21@gmail.com',
+    subject: 'New Pin Studio sign-up',
+    text:    `New user signed up:\n\nName:  ${name}\nEmail: ${email}\nDate:  ${new Date().toUTCString()}`,
+  }).catch(err => console.error('[email]', err.message));
+}
 
 // ── Spaces client (DigitalOcean Spaces is S3-compatible) ──────────────────────
 
@@ -72,6 +92,7 @@ app.post('/api/auth/signup', express.json(), async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '30d' }
     );
+    notifySignup(rows[0].name, rows[0].email);
     res.status(201).json({ token, user: rows[0] });
   } catch (err) {
     if (err.code === '23505')
