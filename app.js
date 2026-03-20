@@ -45,7 +45,7 @@ const PIN_COLOURS = [
 
 // ── State ──────────────────────────────────────────────────
 
-let pins          = loadPins();
+let pins          = [];
 let editingId     = null;
 let pendingDeleteId = null;
 let currentPhotoData = null;
@@ -97,15 +97,25 @@ const importInput      = document.getElementById('importInput');
 // app still works without any server setup.
 const IS_DEPLOYED = !['localhost', '127.0.0.1', ''].includes(window.location.hostname);
 
-// ── Storage ───────────────────────────────────────────────
+// ── Auth helpers ──────────────────────────────────────────
 
-function loadPins() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-  catch { return []; }
+const AUTH_KEY = 'pinStudio_token';
+
+function getToken()      { return localStorage.getItem(AUTH_KEY); }
+function saveToken(t)    { localStorage.setItem(AUTH_KEY, t); }
+function clearToken()    { localStorage.removeItem(AUTH_KEY); }
+function isLoggedIn()    { return !!getToken(); }
+function authHeaders(extra = {}) {
+  return { Authorization: `Bearer ${getToken()}`, ...extra };
 }
 
-function savePins() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(pins));
+// ── Storage ───────────────────────────────────────────────
+
+async function loadPins() {
+  if (!isLoggedIn()) return [];
+  const res = await fetch('/api/pins', { headers: authHeaders() });
+  if (res.status === 401) { handleLogout(); return []; }
+  return res.ok ? res.json() : [];
 }
 
 // ── Scene decoration ──────────────────────────────────────
@@ -426,28 +436,44 @@ function closeDeleteModal() {
 
 // ── CRUD ──────────────────────────────────────────────────
 
-function addPin(data) {
-  pins.unshift({ id: crypto.randomUUID(), ...data, favourite: false, createdAt: Date.now() });
-  savePins();
+async function addPin(data) {
+  const res = await fetch('/api/pins', {
+    method:  'POST',
+    headers: authHeaders({ 'Content-Type': 'application/json' }),
+    body:    JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to save pin');
+  const pin = await res.json();
+  pins.unshift(pin);
 }
 
-function updatePin(id, data) {
+async function updatePin(id, data) {
+  const res = await fetch(`/api/pins/${id}`, {
+    method:  'PUT',
+    headers: authHeaders({ 'Content-Type': 'application/json' }),
+    body:    JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to update pin');
+  const updated = await res.json();
   const idx = pins.findIndex(p => p.id === id);
-  if (idx !== -1) { pins[idx] = { ...pins[idx], ...data }; savePins(); }
+  if (idx !== -1) pins[idx] = updated;
 }
 
-function deletePin(id) {
+async function deletePin(id) {
+  await fetch(`/api/pins/${id}`, {
+    method:  'DELETE',
+    headers: authHeaders(),
+  });
   pins = pins.filter(p => p.id !== id);
-  savePins();
 }
 
-function toggleFavourite(id) {
+async function toggleFavourite(id) {
   const pin = pins.find(p => p.id === id);
   if (!pin) return;
-  pin.favourite = !pin.favourite;
-  savePins();
+  const wasFav = !!pin.favourite;
+  await updatePin(id, { ...pin, favourite: !wasFav });
   render();
-  showToast(pin.favourite ? `"${pin.name}" added to favourites ★` : `"${pin.name}" removed from favourites`);
+  showToast(wasFav ? `"${pin.name}" removed from favourites` : `"${pin.name}" added to favourites ★`);
 }
 
 // ── Export / Import ───────────────────────────────────────
@@ -468,7 +494,7 @@ function exportCollection() {
 function importCollection(file) {
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = e => {
+  reader.onload = async e => {
     try {
       const data = JSON.parse(e.target.result);
       const importedPins = Array.isArray(data) ? data : Array.isArray(data.pins) ? data.pins : null;
@@ -484,12 +510,15 @@ function importCollection(file) {
 
       if (!confirm(`Import ${newPins.length} new pin badge${newPins.length !== 1 ? 's' : ''}? Your existing collection will not be changed.`)) return;
 
-      // Ensure all imported pins have the favourite field
-      newPins.forEach(p => { if (p.favourite === undefined) p.favourite = false; });
-      pins.push(...newPins);
-      savePins();
+      let imported = 0;
+      for (const p of newPins) {
+        try {
+          await addPin({ name: p.name, category: p.category, notes: p.notes || null, photo: p.photo || null });
+          imported++;
+        } catch { /* skip failed pins */ }
+      }
       render();
-      showToast(`Imported ${newPins.length} pin badge${newPins.length !== 1 ? 's' : ''}!`);
+      showToast(`Imported ${imported} pin badge${imported !== 1 ? 's' : ''}!`);
     } catch {
       showToast('Could not read backup file');
     }
@@ -538,10 +567,10 @@ closeDeleteBtn.addEventListener('click', closeDeleteModal);
 cancelDeleteBtn.addEventListener('click', closeDeleteModal);
 deleteOverlay.addEventListener('click', e => { if (e.target === deleteOverlay) closeDeleteModal(); });
 
-confirmDeleteBtn.addEventListener('click', () => {
+confirmDeleteBtn.addEventListener('click', async () => {
   if (!pendingDeleteId) return;
   const pin = pins.find(p => p.id === pendingDeleteId);
-  deletePin(pendingDeleteId);
+  await deletePin(pendingDeleteId);
   closeDeleteModal();
   render();
   showToast(`"${pin?.name}" removed from collection`);
@@ -627,7 +656,7 @@ photoUploadArea.addEventListener('drop', e => {
 });
 
 // Form submit
-pinForm.addEventListener('submit', e => {
+pinForm.addEventListener('submit', async e => {
   e.preventDefault();
   const name     = pinNameInput.value.trim();
   const category = pinCategorySel.value;
@@ -638,18 +667,20 @@ pinForm.addEventListener('submit', e => {
 
   const data = { name, category, notes, photo: currentPhotoData || null };
 
-  if (editingId) {
-    // Preserve the existing favourite state when editing
-    const existing = pins.find(p => p.id === editingId);
-    updatePin(editingId, { ...data, favourite: existing ? !!existing.favourite : false });
-    showToast(`"${name}" updated!`);
-  } else {
-    addPin(data);
-    showToast(`"${name}" added to your collection!`);
+  try {
+    if (editingId) {
+      const existing = pins.find(p => p.id === editingId);
+      await updatePin(editingId, { ...data, favourite: existing ? !!existing.favourite : false });
+      showToast(`"${name}" updated!`);
+    } else {
+      await addPin(data);
+      showToast(`"${name}" added to your collection!`);
+    }
+    closeModal();   // direct close — no dirty check needed after a successful save
+    render();
+  } catch {
+    showToast('Could not save pin — please try again');
   }
-
-  closeModal();   // direct close — no dirty check needed after a successful save
-  render();
 });
 
 // Pin grid delegation — button actions + click-anywhere-on-card to edit
@@ -708,7 +739,77 @@ if (themeSelect) {
   themeSelect.addEventListener('change', () => applyTheme(themeSelect.value));
 }
 
+// ── Auth screen / app visibility ──────────────────────────
+
+function showAuthScreen() {
+  document.getElementById('authScreen').style.display = 'flex';
+  document.getElementById('app').style.display        = 'none';
+}
+
+function showApp() {
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('app').style.display        = 'block';
+}
+
+function handleLogout() {
+  clearToken();
+  pins = [];
+  showAuthScreen();
+}
+
+document.getElementById('authForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const isSignup = document.getElementById('authMode').dataset.mode === 'signup';
+  const email    = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const name     = document.getElementById('authName').value.trim();
+
+  const endpoint = isSignup ? '/api/auth/signup' : '/api/auth/login';
+  const body     = isSignup ? { email, password, name } : { email, password };
+
+  try {
+    const res  = await fetch(endpoint, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) { showToast(data.error || 'Authentication failed'); return; }
+
+    saveToken(data.token);
+    pins = await loadPins();
+    showApp();
+    render();
+  } catch {
+    showToast('Network error — please try again');
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+document.getElementById('authToggleLink').addEventListener('click', e => {
+  e.preventDefault();
+  const modeEl   = document.getElementById('authMode');
+  const isSignup = modeEl.dataset.mode === 'signup';
+  modeEl.dataset.mode = isSignup ? 'login' : 'signup';
+  document.getElementById('authNameGroup').style.display = isSignup ? 'none' : 'block';
+  document.getElementById('authTitle').textContent       = isSignup ? 'Welcome back' : 'Create your account';
+  document.getElementById('authSubmitBtn').textContent   = isSignup ? 'Log in' : 'Create account';
+  document.getElementById('authToggleText').textContent  = isSignup ? "Don't have an account? " : 'Already have an account? ';
+  document.getElementById('authToggleLink').textContent  = isSignup ? 'Sign up' : 'Log in';
+});
+
 // ── Init ──────────────────────────────────────────────────
 
-applyTheme(localStorage.getItem(THEME_KEY) || 'fun');
-render();
+async function init() {
+  applyTheme(localStorage.getItem(THEME_KEY) || 'fun');
+  if (!isLoggedIn()) {
+    showAuthScreen();
+    return;
+  }
+  pins = await loadPins();
+  showApp();
+  render();
+}
+
+init();
