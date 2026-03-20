@@ -305,6 +305,15 @@ body {
   font-size: 0.95rem;
 }
 
+/* Match empty-state add button in small mode for 1:1 spacing/font with btn-cta-sm */
+.empty-add-btn {
+  padding: 12px 28px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  min-width: 220px;
+  border-radius: 60px;
+}
+
 .btn-cta-secondary {
   display: inline-flex;
   align-items: center;
