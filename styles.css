@@ -632,6 +632,8 @@ body {
 .search-input {
   padding-left: 34px !important;
   min-width: 180px;
+  background-image: none !important;
+  padding-right: 12px !important;
 }
 
 .search-input::-webkit-search-cancel-button { cursor: pointer; }
