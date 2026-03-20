@@ -512,7 +512,7 @@ function showToast(msg) {
 // ── Events ────────────────────────────────────────────────
 
 // All "open modal" buttons
-['openModalBtn', 'openModalBtn2', 'openModalBtnBar'].forEach(id => {
+['openModalBtn', 'openModalBtn2', 'openModalBtnBar', 'emptyAddBtn'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('click', () => openModal());
 });
