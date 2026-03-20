@@ -546,12 +546,13 @@ body {
   font-weight: 700;
   font-family: 'Nunito', sans-serif;
   color: var(--text);
-  background: var(--bg);
+  background-color: var(--bg);
   cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b08af0' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
+  background-size: 12px 12px;
   transition: var(--trans);
   min-width: 140px;
 }
@@ -1410,12 +1411,13 @@ body {
 [data-theme="hero"] .pin-count-badge { background: rgba(237,29,36,0.15); color: #ed1d24; }
 [data-theme="hero"] .filter-group label { color: #aaa; }
 [data-theme="hero"] .control-select {
-  background: #111;
+  background-color: #111;
   border-color: #444;
   color: #fff;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffd700' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-}
-[data-theme="hero"] .control-select:focus { border-color: #ed1d24; box-shadow: 0 0 0 3px rgba(237,29,36,0.2); }
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}[data-theme="hero"] .control-select:focus { border-color: #ed1d24; box-shadow: 0 0 0 3px rgba(237,29,36,0.2); }
 [data-theme="hero"] .btn-add-inline { background: #ed1d24; box-shadow: 0 3px 14px rgba(237,29,36,0.4); }
 [data-theme="hero"] .btn-add-inline:hover { background: #b71c1c; }
 [data-theme="hero"] .empty-add-btn { background: #ed1d24; color: #fff; border-color: #fff; box-shadow: 0 3px 14px rgba(237,29,36,0.35); }
@@ -1603,12 +1605,13 @@ body {
 [data-theme="cosmic"] .pin-count-badge { background: rgba(79,195,247,0.12); color: #4fc3f7; }
 [data-theme="cosmic"] .filter-group label { color: #6a80b0; }
 [data-theme="cosmic"] .control-select {
-  background: #050518;
+  background-color: #050518;
   border-color: #1a2050;
   color: #e8f0ff;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234fc3f7' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-}
-[data-theme="cosmic"] .control-select:focus {
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}[data-theme="cosmic"] .control-select:focus {
   border-color: #4fc3f7;
   box-shadow: 0 0 0 3px rgba(79,195,247,0.2);
 }
@@ -1793,10 +1796,12 @@ body {
 [data-theme="anime"] .pin-count-badge { background: rgba(232, 85, 154, 0.1); color: #c0396e; }
 [data-theme="anime"] .filter-group label { color: #9b6a9b; }
 [data-theme="anime"] .control-select {
-  background: #fff5fc;
+  background-color: #fff5fc;
   border-color: #e8c0d8;
   color: #3a1a3a;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e8559a' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
 }
 [data-theme="anime"] .control-select:focus {
   border-color: #e8559a;
@@ -2002,12 +2007,14 @@ body {
 [data-theme="retro"] .pin-count-badge { background: rgba(34, 170, 34, 0.1); color: #22aa22; }
 [data-theme="retro"] .filter-group label { color: #8888b8; }
 [data-theme="retro"] .control-select {
-  background: #1a1a4a;
+  background-color: #1a1a4a;
   border-color: #3a3a6a;
   border-radius: 0;
   color: #e8e8e8;
   border-width: 2px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2322aa22' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
 }
 [data-theme="retro"] .control-select:focus {
   border-color: #22aa22;
