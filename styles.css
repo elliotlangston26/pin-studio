@@ -305,6 +305,20 @@ body {
   font-size: 0.95rem;
 }
 
+.add-plus::before {
+  content: '+';
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 900;
+  margin-right: 8px;
+  line-height: 1;
+  width: 1ch;
+  text-align: center;
+}
+
+.add-plus svg { display: none; /* keep plus symbol consistent by default */ }
+
+
 /* Match empty-state add button in small mode for 1:1 spacing/font with btn-cta-sm */
 .empty-add-btn {
   padding: 12px 28px;
