@@ -700,13 +700,33 @@ body {
   outline-offset: 3px;
 }
 
-.empty-add-btn svg {
-  transition: transform 0.2s ease, filter 0.2s ease;
+/* Unified plus-add button style across themes */
+.empty-add-btn,
+.btn-add-inline,
+.btn-cta-primary {
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: 800;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  transition: var(--trans);
 }
 
-.empty-illustration svg { width: 180px; height: 180px; }
+.empty-add-btn svg,
+.btn-add-inline svg,
+.btn-cta-primary svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
 
-.empty-state h3 {
+.empty-add-btn:hover,
+.btn-add-inline:hover,
+.btn-cta-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
   font-family: 'Fredoka One', cursive;
   font-size: 2rem;
   font-weight: 400;
@@ -1389,6 +1409,8 @@ body {
 [data-theme="hero"] .control-select:focus { border-color: #ed1d24; box-shadow: 0 0 0 3px rgba(237,29,36,0.2); }
 [data-theme="hero"] .btn-add-inline { background: #ed1d24; box-shadow: 0 3px 14px rgba(237,29,36,0.4); }
 [data-theme="hero"] .btn-add-inline:hover { background: #b71c1c; }
+[data-theme="hero"] .empty-add-btn { background: #ed1d24; color: #fff; border-color: #fff; box-shadow: 0 3px 14px rgba(237,29,36,0.35); }
+[data-theme="hero"] .empty-add-btn:hover { background: #b71c1c; }
 
 /* Empty state */
 [data-theme="hero"] .empty-state h3 { color: #ffd700; }
@@ -1586,6 +1608,8 @@ body {
   box-shadow: 0 3px 14px rgba(79,195,247,0.35);
 }
 [data-theme="cosmic"] .btn-add-inline:hover { background: linear-gradient(135deg, #1565c0, #1976d2); }
+[data-theme="cosmic"] .empty-add-btn { background: linear-gradient(135deg, #0d47a1, #1565c0); color: #fff; border-color: #fff; box-shadow: 0 3px 14px rgba(79,195,247,0.35); }
+[data-theme="cosmic"] .empty-add-btn:hover { background: linear-gradient(135deg, #1565c0, #1976d2); }
 
 /* Empty state */
 [data-theme="cosmic"] .empty-state h3 { color: #4fc3f7; }
@@ -1717,6 +1741,15 @@ body {
 }
 [data-theme="anime"] .btn-cta-primary:hover {
   box-shadow: 0 10px 36px rgba(232, 85, 154, 0.55), 0 0 40px rgba(232, 85, 154, 0.2);
+}
+[data-theme="anime"] .empty-add-btn {
+  background: linear-gradient(135deg, #e8559a 0%, #c0396e 50%, #e8559a 100%);
+  color: #fff;
+  border-color: #fff;
+  box-shadow: 0 4px 18px rgba(232, 85, 154, 0.45);
+}
+[data-theme="anime"] .empty-add-btn:hover {
+  filter: brightness(1.08);
 }
 [data-theme="anime"] .btn-cta-secondary {
   background: rgba(255, 240, 250, 0.6);
@@ -1917,6 +1950,15 @@ body {
   background: #2acc2a;
   box-shadow: 6px 6px 0 #118811;
   transform: translate(-2px, -2px);
+}
+[data-theme="retro"] .empty-add-btn {
+  background: #22aa22;
+  color: #0d0d28;
+  border-color: #118811;
+  box-shadow: 4px 4px 0 #118811;
+}
+[data-theme="retro"] .empty-add-btn:hover {
+  background: #2acc2a;
 }
 [data-theme="retro"] .btn-cta-secondary {
   background: rgba(13, 13, 40, 0.6);
