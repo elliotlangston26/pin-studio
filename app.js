@@ -553,8 +553,23 @@ confirmDeleteBtn.addEventListener('click', () => {
 // When deployed to Vercel: uploads the file to /api/upload → Vercel Blob,
 // returns a permanent public URL.
 // When running locally: converts to base64 via FileReader (no server needed).
+function getImageContentType(file) {
+  if (file.type && file.type.startsWith('image/')) return file.type;
+  const name = (file.name || '').toLowerCase();
+  if (name.endsWith('.jpeg') || name.endsWith('.jpg')) return 'image/jpeg';
+  if (name.endsWith('.png')) return 'image/png';
+  if (name.endsWith('.gif')) return 'image/gif';
+  if (name.endsWith('.webp')) return 'image/webp';
+  return 'image/jpeg';
+}
+
 async function handlePhotoFile(file) {
-  if (!file || !file.type.startsWith('image/')) return;
+  if (!file) return;
+  const contentType = getImageContentType(file);
+  if (!contentType.startsWith('image/')) {
+    showToast('Invalid file type - please select an image');
+    return;
+  }
   if (file.size > 5 * 1024 * 1024) { showToast('Photo must be under 5 MB'); return; }
 
   if (IS_DEPLOYED) {
@@ -563,7 +578,7 @@ async function handlePhotoFile(file) {
       const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
         method: 'POST',
         body: file,
-        headers: { 'content-type': file.type },
+        headers: { 'content-type': contentType },
       });
       if (!res.ok) throw new Error(await res.text());
       const { url } = await res.json();

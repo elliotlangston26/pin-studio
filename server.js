@@ -43,10 +43,15 @@ app.use(express.static(path.join(__dirname)));
 
 app.post(
   '/api/upload',
-  express.raw({ type: 'image/*', limit: '5mb' }),
+  express.raw({ type: ['image/*', 'application/octet-stream'], limit: '10mb' }),
   async (req, res) => {
     if (!req.body || !req.body.length) {
       return res.status(400).json({ error: 'No image received' });
+    }
+
+    const rawType = (req.headers['content-type'] || '').toLowerCase();
+    if (!rawType.startsWith('image/')) {
+      return res.status(400).json({ error: 'Invalid image type' });
     }
 
     const filename    = req.query.filename
