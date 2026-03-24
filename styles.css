@@ -938,11 +938,12 @@ body {
   background: var(--surface);
   border-radius: 24px;
   width: 100%;
-  max-width: 480px;
+  max-width: 500px;
   box-shadow: 0 30px 90px rgba(0,0,0,0.35);
   animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   max-height: 90vh;
   overflow-y: auto;
+  padding-bottom: 20px;
 }
 
 .modal-small { max-width: 380px; }
