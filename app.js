@@ -99,20 +99,33 @@ const IS_DEPLOYED = !['localhost', '127.0.0.1', ''].includes(window.location.hos
 
 // ── Auth helpers ──────────────────────────────────────────
 
-const AUTH_KEY = 'pinStudio_token';
+const AUTH_KEY        = 'pinStudio_token';
+const GUEST_FLAG_KEY  = 'pinStudio_guest';
+const GUEST_PINS_KEY  = 'pinStudio_guest_pins';
 
 function getToken()      { return localStorage.getItem(AUTH_KEY); }
 function saveToken(t)    { localStorage.setItem(AUTH_KEY, t); }
 function clearToken()    { localStorage.removeItem(AUTH_KEY); }
-function isLoggedIn()    { return !!getToken(); }
+function isGuestMode()   { return localStorage.getItem(GUEST_FLAG_KEY) === '1'; }
+function setGuestMode()  { localStorage.setItem(GUEST_FLAG_KEY, '1'); }
+function clearGuestMode(){ localStorage.removeItem(GUEST_FLAG_KEY); }
+function isLoggedIn()    { return !!getToken() || isGuestMode(); }
 function authHeaders(extra = {}) {
   return { Authorization: `Bearer ${getToken()}`, ...extra };
+}
+
+function loadGuestPins() {
+  try { return JSON.parse(localStorage.getItem(GUEST_PINS_KEY) || '[]'); } catch { return []; }
+}
+function saveGuestPins(list) {
+  localStorage.setItem(GUEST_PINS_KEY, JSON.stringify(list));
 }
 
 // ── Storage ───────────────────────────────────────────────
 
 async function loadPins() {
   if (!isLoggedIn()) return [];
+  if (isGuestMode()) return loadGuestPins();
   const res = await fetch('/api/pins', { headers: authHeaders() });
   if (res.status === 401) { handleLogout(); return []; }
   return res.ok ? res.json() : [];
@@ -437,6 +450,12 @@ function closeDeleteModal() {
 // ── CRUD ──────────────────────────────────────────────────
 
 async function addPin(data) {
+  if (isGuestMode()) {
+    const pin = { ...data, id: Date.now(), created_at: new Date().toISOString() };
+    pins.unshift(pin);
+    saveGuestPins(pins);
+    return;
+  }
   const res = await fetch('/api/pins', {
     method:  'POST',
     headers: authHeaders({ 'Content-Type': 'application/json' }),
@@ -448,6 +467,11 @@ async function addPin(data) {
 }
 
 async function updatePin(id, data) {
+  if (isGuestMode()) {
+    const idx = pins.findIndex(p => p.id === id);
+    if (idx !== -1) { pins[idx] = { ...pins[idx], ...data }; saveGuestPins(pins); }
+    return;
+  }
   const res = await fetch(`/api/pins/${id}`, {
     method:  'PUT',
     headers: authHeaders({ 'Content-Type': 'application/json' }),
@@ -460,6 +484,11 @@ async function updatePin(id, data) {
 }
 
 async function deletePin(id) {
+  if (isGuestMode()) {
+    pins = pins.filter(p => p.id !== id);
+    saveGuestPins(pins);
+    return;
+  }
   await fetch(`/api/pins/${id}`, {
     method:  'DELETE',
     headers: authHeaders(),
@@ -759,6 +788,8 @@ function updateAuthButtons() {
   if (isLoggedIn()) {
     signUpBtn.style.display = 'none';
     logoutBtn.style.display = '';
+    if (isGuestMode()) logoutBtn.textContent = 'Exit Test Mode';
+    else logoutBtn.textContent = 'Log out';
   } else {
     signUpBtn.style.display = '';
     logoutBtn.style.display = 'none';
@@ -767,6 +798,7 @@ function updateAuthButtons() {
 
 function handleLogout() {
   clearToken();
+  clearGuestMode();
   pins = [];
   updateAuthButtons();
   render();
@@ -818,6 +850,15 @@ document.getElementById('authToggleLink').addEventListener('click', e => {
   document.getElementById('authSubmitBtn').textContent   = isSignup ? 'Log in' : 'Create account';
   document.getElementById('authToggleText').textContent  = isSignup ? "Don't have an account? " : 'Already have an account? ';
   document.getElementById('authToggleLink').textContent  = isSignup ? 'Sign up' : 'Log in';
+});
+
+document.getElementById('guestModeBtn').addEventListener('click', async () => {
+  setGuestMode();
+  pins = loadGuestPins();
+  closeAuthModal();
+  updateAuthButtons();
+  render();
+  showToast('Test mode active — your pins are saved locally only');
 });
 
 // ── Guard: redirect unauthenticated "add pin" clicks to auth modal ────────────
